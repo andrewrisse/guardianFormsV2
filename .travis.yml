@@ -1,0 +1,19 @@
+language: node.js
+node_js:
+  - 12
+
+services:
+  - docker
+
+stages:
+  - build
+
+script:
+  - cd client
+  - yarn install
+  - yarn build
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t guardianforms -f Dockerfile .
+  - docker tag guardianforms andrewrisse/guardian-forms:latest
+  - docker push andrewrisse/guardian-forms
+
