@@ -1,7 +1,8 @@
-import React, {ReactNode, useState} from 'react';
+import React, { useState } from 'react';
 import { styled } from '@material-ui/core';
 import DashboardNavbar from '../../components/DashboardNavbar';
 import DashboardSidebar from '../../components/DashboardSidebar';
+import { Outlet } from 'react-router-dom';
 
 
 
@@ -39,11 +40,9 @@ const DashboardLayoutContent = styled('div')({
   overflow: 'auto'
 });
 
-type DashboardLayoutProps = {
-  children: ReactNode;
-}
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({children}) => {
+
+const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
@@ -56,7 +55,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({children}) => {
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
-            {children}
+            <Outlet />
           </DashboardLayoutContent>
         </DashboardLayoutContainer>
       </DashboardLayoutWrapper>

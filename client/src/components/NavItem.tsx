@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ListItem } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import { matchPath, useLocation } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 

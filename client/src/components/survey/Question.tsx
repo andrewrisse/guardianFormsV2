@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Card, CardHeader, IconButton, Stack } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -11,7 +10,6 @@ import {
   isElementInEditMode,
   removeSurveyQuestion,
   setQuestionInEditMode,
-  setQuestionInViewMode
 } from '../../redux/slices/survey';
 import { IQuestion } from '../../../../@types/question';
 

@@ -1,4 +1,3 @@
-import { AnyAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { dispatch } from '../store';

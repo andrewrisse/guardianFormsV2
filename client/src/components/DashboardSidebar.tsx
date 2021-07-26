@@ -81,7 +81,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
-  }, [pathname]);
+  }, [pathname, openMobile, onMobileClose]);
 
   const content = (
     <Box

@@ -1,15 +1,11 @@
 import { Helmet } from 'react-helmet';
-import { Box, Container, Grid } from '@material-ui/core';
-import DashboardLayout from '../../../../layouts/dashboard/DashboardLayout';
-import { experimentalStyled as styled } from '@material-ui/core/styles';
+import { Box, Container } from '@material-ui/core';
 import Page from '../../../../components/Page';
 import NewSurveyForm from '../../../../components/survey/NewSurveyForm';
 
 
 const NewSurvey = () => (
   <Page title="New Survey | GuardianForms">
-
-    <DashboardLayout>
       <Helmet>
         <title>New Survey | Guardian Forms</title>
       </Helmet>
@@ -24,8 +20,6 @@ const NewSurvey = () => (
           <NewSurveyForm />
         </Container>
       </Box>
-    </DashboardLayout>
-
   </Page>
 );
 

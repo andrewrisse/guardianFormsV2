@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import { Box, Container, Grid } from '@material-ui/core';
 import { useEffect } from 'react';
 import { getSurvey, setEditMode } from '../../../../redux/slices/survey';
-import DashboardLayout from '../../../../layouts/dashboard/DashboardLayout';
 import NewSurveyForm from '../../../../components/survey/NewSurveyForm';
 
 const SurveyDetails = () => {
@@ -20,15 +19,14 @@ const SurveyDetails = () => {
       fetchSurvey();
       dispatch(setEditMode(true));
     }
-  }, [sid]);
+  }, [sid, dispatch]);
 
   return (
-
-      <DashboardLayout>
-        <Helmet>
+    <>
+     <Helmet>
           <title>Survey | Guardian Forms</title>
-        </Helmet>
-        <Box
+     </Helmet>
+     <Box
           sx={{
             backgroundColor: 'background.default',
             minHeight: '100%',
@@ -42,9 +40,8 @@ const SurveyDetails = () => {
               </Grid>
             </Grid>
           </Container>
-        </Box>
-      </DashboardLayout>
-
+     </Box>
+    </>
   );
 };
 
