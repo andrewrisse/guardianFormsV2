@@ -1,20 +1,17 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
 import AppAppBar from '../../components/AppAppBar';
 import ProductHero from '../../components/landing/ProductHero';
 import Copyright from '../../components/Copyright';
+import Page from '../../components/Page';
 
 
 const Home = () => {
   return (
-    <div>
-      <Box>
+    <Page title="Home | GuardianForms">
         <AppAppBar />
         <ProductHero />
-
         <Copyright />
-      </Box>
-    </div>
+    </Page>
   );
 };
 

@@ -4,6 +4,7 @@ import theme from '../../theme/theme';
 import ProductHeroLayout from './ProductHeroLayout';
 import { Typography } from '@material-ui/core';
 import { Button } from '@material-ui/core';
+import { PATH_AUTH } from "../../routes/paths";
 
 
 const backgroundImage =
@@ -64,9 +65,9 @@ const ProductHero: FC<ProductHeroTypes> = (props) => {
         size="large"
         className={classes.button}
         component="a"
-        href="/dashboard"
+        href={`${PATH_AUTH.login}`}
       >
-        Dashboard
+        Login
       </Button>
     </ProductHeroLayout>
   );

@@ -1,46 +1,25 @@
-import { lazy, Suspense } from 'react';
-import {Navigate, useLocation, useRoutes} from "react-router-dom";
-import Dashboard from '../pages/dashboard';
-import Home from '../pages/home';
 
 
-const Loadable = (Component: any) => (props: any) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { pathname } = useLocation();
-  const isDashboard = pathname.includes(('/dashboard'));
-
-
-  return (
-    <Suspense
-      fallback={
-        <div>Loading... </div>
-      }
-    >
-      <Component {...props} />
-    </Suspense>
-);
+function path(root: string, sublink: string) {
+  return `${root}${sublink}`;
 }
 
-export default function Router(){
+const ROOTS_AUTH = '/auth';
+const ROOTS_DASHBOARD = "/dashboard";
 
-  // todo change the survey routs to have components instead of navigate tos
-  return useRoutes([
-    {
-      path: "/",
-      element: (<Home />)
-    },
-    {
-      path: 'dashboard',
-      element: (<Dashboard />),
-      children :[
-        {path: "surveys",
-          children: [
-            {path: "/", element: <Navigate to={"/dashboard/surveys"} replace />},
-            {path: "/:sid", element: <Navigate to={"/dashboard/surveys/:sid"} replace />},
-            {path: "/new", element: <Navigate to={"/dashboard/surveys/new"} replace />},
-          ]
-        },
-      ]
-    }
-  ])
+export const PATH_AUTH = {
+  root: ROOTS_AUTH,
+  login: path(ROOTS_AUTH, '/login'),
+  register: path(ROOTS_AUTH, '/register')
 }
+
+export const PATH_DASHBOARD = {
+  root: ROOTS_DASHBOARD,
+  surveys: {
+    root: path(ROOTS_DASHBOARD, 'surveys'),
+    new: path(ROOTS_DASHBOARD, '/new'),
+    survey: path(ROOTS_DASHBOARD, '/:sid')
+  }
+
+}
+

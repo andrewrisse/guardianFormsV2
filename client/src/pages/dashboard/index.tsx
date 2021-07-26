@@ -1,11 +1,12 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container, Grid } from '@material-ui/core';
-// import AuthGuard from '../../src/guards/AuthGuard';
 import Typography from '@material-ui/core/Typography';
 import DashboardLayout from '../../layouts/dashboard/DashboardLayout';
+import Page from '../../components/Page';
 
 const Dashboard = () => (
-  // <AuthGuard>
+  <Page title="Dashboard | GuardianForms">
+
     <DashboardLayout>
       <Helmet>
         <title>Dashboard | Guardian Forms</title>
@@ -26,7 +27,7 @@ const Dashboard = () => (
         </Container>
       </Box>
     </DashboardLayout>
-  // </AuthGuard>
+  </Page>
 );
 
 export default Dashboard;
