@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 
@@ -29,10 +29,6 @@ interface InitialState extends Omit<ISurvey, 'questions'> {
 // TODO add delete button
 const NewSurveyForm = () => {
   const {user} = useAuth0();
-
-  useEffect(() => {
-  console.log(user)
-  }, )
 
   const [open, setOpen] = useState(false);
   const isLoading = useSelector((state: RootState) => state.survey.isLoading);
@@ -65,7 +61,7 @@ const NewSurveyForm = () => {
     enableReinitialize: true,
     initialValues: {
       public: activeSurvey.public,
-      ownerId: activeSurvey.ownerId || "123", //todo should be uid from token
+      ownerId: activeSurvey.ownerId || user?.email || '',
       title: activeSurvey.title || '',
       description: activeSurvey.description || ''
     },
