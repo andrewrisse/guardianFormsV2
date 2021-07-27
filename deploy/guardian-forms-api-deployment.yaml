@@ -27,10 +27,13 @@ spec:
             limits:
               memory: "1024Mi"
               cpu: "500m"
+          ports:
+            - containerPort: 80
           env:
           - name: MONGODB_URI
             valueFrom:
                 secretKeyRef:
                   name: env-secret
                   key: MONGODB_URI
+      restartPolicy: Always
 
