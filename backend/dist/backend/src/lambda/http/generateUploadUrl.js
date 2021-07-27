@@ -1,3 +1,4 @@
+"use strict";
 // import 'source-map-support/register'
 //
 // import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
@@ -26,3 +27,4 @@
 // }
 //
 //
+//# sourceMappingURL=generateUploadUrl.js.map

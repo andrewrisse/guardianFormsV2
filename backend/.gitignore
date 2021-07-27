@@ -8,3 +8,29 @@ jspm_packages
 # Webpack directories
 .webpack
 
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+log.txt
+
+npm-debug.log*
+
+.idea/
+.sourcemaps/
+.tmp/
+.versions/
+coverage/
+www/
+node_modules/
+tmp/
+temp/
+logfile
+**/.env
+
+.DS_Store
+Thumbs.db
+
+venv/
+

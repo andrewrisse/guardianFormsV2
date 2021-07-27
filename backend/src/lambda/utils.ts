@@ -9,8 +9,12 @@ import { parseUserId } from "../auth/utils";
  */
 export function getUserId(event: APIGatewayProxyEvent): string {
   const authorization = event.headers.Authorization
-  const split = authorization.split(' ')
-  const jwtToken = split[1]
+  if(authorization){
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
 
-  return parseUserId(jwtToken)
+    return parseUserId(jwtToken)
+  }
+  throw new Error("No Auth Header");
+
 }

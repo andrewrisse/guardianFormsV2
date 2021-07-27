@@ -1,190 +1,112 @@
 import 'source-map-support/register'
-import * as uuid from 'uuid';
+import mongoose from "mongoose";
 import { createLogger } from '../utils/logger'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
-import { TodoItem } from '../models/TodoItem'
-import { DeleteTodoRequest } from '../requests/DeleteTodoRequest'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-import { Key } from 'aws-sdk/clients/dynamodb'
-import connectToDatabase from "../dataLayer/database";
-const todosTable = process.env.TODOS_TABLE;
-const bucketName = process.env.ATTACHMENTS_S3_BUCKET;
-const index = process.env.INDEX;
 import Survey from '../models/survey';
-
+import Question from '../models/question';
+import { ISurvey } from '../../../@types/survey';
+import { ALLOWED_SURVEY_PATCH_FIELDS } from "../../@types/survey";
 
 
 const logger = createLogger('surveys')
-const mongoClient = connectToDatabase();
 
-/**
- * Get a query parameter or return "undefined"
- *
- * @param {Object} event HTTP event passed to a Lambda function
- * @param {string} name a name of a query parameter to return
- *
- * @returns {string} a value of a query parameter value or "undefined" if a parameter is not defined
- */
-function getQueryParameter(event, name) {
-  const queryParams = event.queryStringParameters
-  if (!queryParams) {
-    return undefined
-  }
-
-  return queryParams[name]
-}
+// /**
+//  * Get a query parameter or return "undefined"
+//  *
+//  * @param {Object} event HTTP event passed to a Lambda function
+//  * @param {string} name a name of a query parameter to return
+//  *
+//  * @returns {string} a value of a query parameter value or "undefined" if a parameter is not defined
+//  */
+// function getQueryParameter(event, name) {
+//   const queryParams = event.queryStringParameters
+//   if (!queryParams) {
+//     return undefined
+//   }
+//
+//   return queryParams[name]
+// }
 
 export const getAllUsersSurveys = async (ownerId: string
 ) => {
   logger.info("Owner Id: ", ownerId);
 
-  //@ts-ignore
+  // @ts-ignore
   const surveys = await Survey.find({ ownerId });
   logger.info("Result: " + surveys)
-
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({
-      surveys,
-    })
-  }
+  return surveys;
 };
 
 
-export const getTodos = async (userId: string, nextKey: Key, limit: string) => {
-
-  const scanParams = {
-    TableName: todosTable,
-    IndexName: index,
-    KeyConditionExpression: "userId = :userId",
-    ExpressionAttributeValues: {
-      ":userId": userId
-    },
-    limit,
-    ExclusiveStartKey: nextKey
+export const createSurvey = async (surveyData: ISurvey) => {
+  const questionsFromModel = [];
+  for (const q of surveyData.questions) {
+    const newQuestion = new Question({ ...q });
+    questionsFromModel.push(newQuestion);
   }
 
-  logger.info("Query params: ", scanParams);
+  surveyData.questions = questionsFromModel;
 
-  const result = await docClient.query(scanParams).promise()
+  const newSurvey = new Survey(surveyData);
+  await newSurvey.save();
+  return newSurvey;
+};
 
-  const items = result.Items
+export const getSurvey = async (sid: string, ownerId: string) => {
 
-  logger.info("Result: " + result)
+  const survey = await Survey.findOne({ _id: mongoose.Types.ObjectId(sid) });
+  if (!survey) throw new Error("Not Found");
 
-  // Return result
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({
-      items,
-      // Encode the JSON object so a client can return it in a URL as is
-      nextKey: encodeNextKey(result.LastEvaluatedKey)
-    })
-  }
-}
+  // Survey must be public or the user must be the survey owner to get the survey
+  if (!survey.public && survey.ownerId !== ownerId)
+    throw new Error('Forbidden');
+
+  return survey;
+};
+
+export const updateSurvey = async (sid: string, ownerId: string, updatedFields: ISurvey) => {
+
+  // Get survey data
+  const survey = await Survey.findOne({ _id: mongoose.Types.ObjectId(sid) });
+  if (!survey) throw new Error("Not Found");
+    if (survey && survey.ownerId !== ownerId)
+    // User must be the survey owner to update the survey
+    throw new Error('Forbidden');
+
+    return  updateSurveyLogic(sid as string, survey, updatedFields);
+};
 
 
-export const createTodo =  async (createTodoRequest: CreateTodoRequest) => {
-
-
-  const todoId = uuid.v4();
-  const userId = createTodoRequest.userId;
-  const name = createTodoRequest.name;
-  const dueDate = createTodoRequest.dueDate;
-
-  const newTodo: TodoItem = {
-    userId,
-    todoId,
-    createdAt: new Date().toISOString(),
-    name,
-    dueDate,
-    done: false,
-    attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${todoId}`
-  }
-
-  await docClient.put({
-    TableName: todosTable,
-    Item: newTodo
-  }).promise();
-  logger.info("Created todo: " , newTodo);
-  return {
-    statusCode: 201,
-    headers: { 'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify({item: newTodo})
-  }
-
-}
-
-export const deleteTodo = async (deleteTodoRequest: DeleteTodoRequest) => {
-  try{
-    await docClient.delete({TableName: todosTable, Key: {todoId: deleteTodoRequest.todoId, userId: deleteTodoRequest.userId}}).promise()
-    logger.info("Deleted Todo");
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin' : "*"
-      },
-      body: "Successfully deleted"
+export const updateSurveyLogic = async (
+  sid: string,
+  survey: ISurvey,
+  updatedFields: ISurvey
+) => {
+  const updatedSurvey = {};
+  // Update only allowed fields
+  let field: string;
+  for (field of ALLOWED_SURVEY_PATCH_FIELDS) {
+    if (field in updatedFields) {
+      // @ts-ignore
+      updatedSurvey[field] = updatedFields[field];
     }
   }
-  catch(e){
-    logger.error('Error deleting todo: ', e.message);
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin' : "*"
-      },
-      body: JSON.stringify({
-        error: "Error deleting todo"
-      })
 
-    }
-  }
-}
+  await Survey.updateOne({ _id: mongoose.Types.ObjectId(sid) }, { $set: updatedSurvey });
+  return updatedSurvey;
+};
 
-export const updateTodo = async (updateTodoRequest: UpdateTodoRequest) => {
-  try{
-    await docClient.update({TableName: todosTable,  Key: {
-        userId: updateTodoRequest.userId,
-        todoId: updateTodoRequest.todoId
-      },
-      ExpressionAttributeNames: {
-        '#todo_name': 'name',
-      },
-      ExpressionAttributeValues: {
-        ':name': updateTodoRequest.name,
-        ':dueDate': updateTodoRequest.dueDate,
-        ':done': updateTodoRequest.done,
-      },
-      UpdateExpression: 'SET #todo_name = :name, dueDate = :dueDate, done = :done',
-      ReturnValues: 'UPDATED_NEW',
-    }).promise();
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin' : "*"
-      },
-      body: ""
-    }
-  }
-  catch(error){
-    logger.error("Error updating todo: " , error.message)
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin' : "*"
-      },
-      body: JSON.stringify({
-        error: "Error updating todo"
-      })
 
-    }
+export const deleteSurvey = async (sid: string, ownerId: string,) => {
+
+  const survey = await Survey.findOne({ _id: mongoose.Types.ObjectId(sid) });
+
+  if (survey) {
+    // Check user is the owner of this survey before deleting
+    if (survey.ownerId !== ownerId) throw new Error('Forbidden');
+
+    return Survey.deleteOne({ _id: mongoose.Types.ObjectId(sid) });
+
+  } else {
+    throw new Error('Not Found');
   }
-}
+};
