@@ -28,31 +28,31 @@ spec:
               memory: "1024Mi"
               cpu: "500m"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           env:
             - name: REACT_APP_AUTH0_DOMAIN_NAME
               valueFrom:
-                configMapKeyRef:
-                  name: env-config
+                secretKeyRef:
+                  name: env-secret
                   key: REACT_APP_AUTH0_DOMAIN_NAME
             - name: REACT_APP_AUTH0_CLIENT_ID
               valueFrom:
-                configMapKeyRef:
-                  name: env-config
+                secretKeyRef:
+                  name: env-secret
                   key: REACT_APP_AUTH0_CLIENT_ID
             - name: REACT_APP_REDIRECT_URL
               valueFrom:
-                configMapKeyRef:
-                  name: env-config
+                secretKeyRef:
+                  name: env-secret
                   key: REACT_APP_REDIRECT_URL
             - name: REACT_APP_BACKEND_URL
               valueFrom:
-                configMapKeyRef:
-                  name: env-config
+                secretKeyRef:
+                  name: env-secret
                   key: REACT_APP_BACKEND_URL
             - name: REACT_APP_HOME_URL
               valueFrom:
-                configMapKeyRef:
-                  name: env-config
+                secretKeyRef:
+                  name: env-secret
                   key: REACT_APP_HOME_URL
       restartPolicy: Always

@@ -1,14 +1,30 @@
-
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
-    service: guardian-forms-api
-  name: guardian-forms-api
+    service: reverseproxy
+  name: reverseproxy
 spec:
-  ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+  replicas: 1
   selector:
-    service: guardian-forms-api
+    matchLabels:
+      service: reverseproxy
+  template:
+    metadata:
+      labels:
+        service: reverseproxy
+    spec:
+      containers:
+        - image: andrewrisse/reverse-proxy:latest
+          name: reverseproxy
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always

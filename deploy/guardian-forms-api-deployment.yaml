@@ -28,37 +28,9 @@ spec:
               memory: "1024Mi"
               cpu: "500m"
           env:
-            - name: URL
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: URL
-            - name: AWS_BUCKET
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: AWS_BUCKET
-            - name: AWS_PROFILE
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: AWS_PROFILE
-            - name: AWS_REGION
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: AWS_REGION
-            - name: MONGODB_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
+          - name: MONGODB_URI
+            valueFrom:
+                secretKeyRef:
+                  name: env-secret
                   key: MONGODB_URI
-          volumeMounts:
-            - name: aws-secret
-              mountPath: "/root/.aws/"
-              readOnly: true
-      restartPolicy: Always
-      volumes:
-        - name: aws-secret
-          secret:
-            secretName: aws-secret
+
