@@ -1,12 +1,14 @@
 FROM node:12.22.1-alpine
 
-ARG NODE_ENV="production"
-
-ENV NODE_ENV=${NODE_ENV}
+ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY ./build .
+COPY ["package.json", "yarn.lock", "./"]
+
+RUN yarn install --production
+
+COPY . .
 
 EXPOSE 80
 

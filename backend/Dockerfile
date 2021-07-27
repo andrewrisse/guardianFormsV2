@@ -1,13 +1,14 @@
-FROM node:12.22.1-alpine
-
-ARG NODE_ENV="production"
-
-ENV NODE_ENV=${NODE_ENV}
+FROM node:12.18.1
+ENV NODE_ENV=production
 
 WORKDIR /app
 
+COPY ["package.json", "yarn.lock", "./"]
+
+RUN yarn install --production
+
 COPY . .
 
-EXPOSE 8080
+EXPOSE 80
 
-CMD [ "yarn", "start" ]
+CMD [ "node", "dist/src/index.js" ]
