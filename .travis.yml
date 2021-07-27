@@ -17,7 +17,7 @@ script:
   - docker tag guardianforms andrewrisse/guardian-forms:latest
   - docker push andrewrisse/guardian-forms
   - cd ..
-  - cd server
+  - cd backend
   - yarn install --frozen-lockfile
   - yarn build
   - docker build -t guardianformsapi -f Dockerfile .
