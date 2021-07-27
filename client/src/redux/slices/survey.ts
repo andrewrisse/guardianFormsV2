@@ -4,6 +4,7 @@ import { dispatch } from '../store';
 import axios from 'axios';
 import { ISurvey } from '../../../../@types/survey';
 import { IQuestion } from '../../../../@types/question';
+import { makeBackendRequest } from '../../utils/backendRequestHelpers';
 
 type SurveyState = {
   isLoading: boolean;
@@ -121,21 +122,21 @@ export function deleteSurvey(sid: ISurvey) {
   };
 }
 
-export async function createSurvey(newSurvey: ISurvey) {
+export async function createSurvey(newSurvey: ISurvey, token: string) {
   dispatch(slice.actions.startLoading());
   try {
-    await axios.post('/api/surveys', { ...newSurvey });
+    await makeBackendRequest('POST', 'surveys', token, newSurvey);
     dispatch(slice.actions.createSurveySuccess());
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }
 }
 
-export async function getSurvey(surveyId: string) {
+export async function getSurvey(surveyId: string, token: string) {
   dispatch(slice.actions.startLoading());
   try {
-    const res = await axios.get(`/api/surveys/${surveyId}`);
-    dispatch(slice.actions.getSurveySuccess(res.data));
+    const res = await makeBackendRequest('GET', `surveys/${surveyId}`, token);
+    dispatch(slice.actions.getSurveySuccess(res));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }

@@ -5,21 +5,25 @@ import { Box, Container, Grid } from '@material-ui/core';
 import { useEffect } from 'react';
 import { getSurvey, setEditMode } from '../../../../redux/slices/survey';
 import NewSurveyForm from '../../../../components/survey/NewSurveyForm';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const SurveyDetails = () => {
+  const { getIdTokenClaims } = useAuth0();
   const {sid} = useParams();
   const dispatch = useDispatch();
 
 
   useEffect(() => {
     async function fetchSurvey() {
-      await getSurvey(sid as string);
+      const idTokenClaims = await getIdTokenClaims();
+     const token =  idTokenClaims.__raw;
+      await getSurvey(sid as string, token);
     }
     if (sid) {
       fetchSurvey();
       dispatch(setEditMode(true));
     }
-  }, [sid, dispatch]);
+  }, [sid, dispatch, getIdTokenClaims]);
 
   return (
     <>

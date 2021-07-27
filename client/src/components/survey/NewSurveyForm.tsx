@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 
@@ -28,11 +28,22 @@ interface InitialState extends Omit<ISurvey, 'questions'> {
 
 // TODO add delete button
 const NewSurveyForm = () => {
-  const {user} = useAuth0();
+  const {user, getIdTokenClaims} = useAuth0();
 
   const [open, setOpen] = useState(false);
   const isLoading = useSelector((state: RootState) => state.survey.isLoading);
   const editMode = useSelector((state: RootState) => state.survey.editMode);
+
+  const [token, setToken] = useState<string>('');
+
+  useEffect(() => {
+  const getToken = async () => {
+    const idTokenClaims = await getIdTokenClaims();
+    const token = idTokenClaims.__raw;
+    setToken(token);
+  }
+    getToken();
+},[getIdTokenClaims]);
 
   const activeSurvey = useSelector(
     (state: RootState) => state.survey.activeSurvey
@@ -60,10 +71,10 @@ const NewSurveyForm = () => {
   const formik = useFormik<InitialState>({
     enableReinitialize: true,
     initialValues: {
-      public: activeSurvey.public,
-      ownerId: activeSurvey.ownerId || user?.email || '',
-      title: activeSurvey.title || '',
-      description: activeSurvey.description || ''
+      public: (activeSurvey && activeSurvey.public) ? activeSurvey.public : false,
+      ownerId: (activeSurvey && activeSurvey.ownerId) ? activeSurvey.ownerId : user?.email || '',
+      title: (activeSurvey && activeSurvey.title) ? activeSurvey.title : '',
+      description: (activeSurvey && activeSurvey.description) ? activeSurvey.description : ''
     },
     validationSchema: NewSurveySchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
@@ -75,7 +86,7 @@ const NewSurveyForm = () => {
             await createSurvey({
               questions: activeSurvey.questions,
               ...values
-            } as ISurvey);
+            } as ISurvey, token);
           }
 
         setOpen(true);
@@ -144,7 +155,7 @@ const NewSurveyForm = () => {
           </Card>
         </Form>
       </FormikProvider>
-      {activeSurvey.questions.map((q: IQuestion, i: number) => (
+      {activeSurvey && activeSurvey.questions.map((q: IQuestion, i: number) => (
         <Question key={i} question={q} />
       ))}
 

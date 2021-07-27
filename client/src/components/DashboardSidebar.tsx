@@ -20,12 +20,7 @@ import {
 import NavItem from './NavItem';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import theme from '../theme/theme';
-
-const user = {
-  avatar: 'https://api.iconify.design/carbon:user-avatar-filled.svg',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
+import { useAuth0 } from '@auth0/auth0-react';
 
 const items = [
   {
@@ -76,6 +71,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                                                            }) => {
   const hidden = useMediaQuery(theme.breakpoints.down('lg'));
   const { pathname } = useLocation();
+  const {user} = useAuth0();
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -100,18 +96,16 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         }}
       >
         <Avatar
-          src={user.avatar}
+          src={(user && user.picture) ? user.picture : "https://api.iconify.design/carbon:user-avatar-filled.svg"}
           sx={{
             width: 64,
             height: 64
           }}
         />
         <Typography color="textPrimary" variant="h5">
-          {user.name}
+          {(user && user.name) ? user.name : "User"}
         </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
-        </Typography>
+
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>

@@ -42,7 +42,7 @@ export default function Router(){
       element: (<AuthGuard> <DashboardLayout /> </AuthGuard>),
       children: [
         {path: '/', element: <Dashboard />},
-        {path: "surveys",
+        {path: "/surveys",
           children: [
             {path: '/', element: <SurveysList />},
             {path: ":sid", element: <SurveyDetails />},
