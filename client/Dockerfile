@@ -6,7 +6,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY . .
+COPY ./build .
 
 EXPOSE 80
 
