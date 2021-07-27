@@ -1,10 +1,6 @@
 
-D
-client/src/config.js,0/b/0b0c72a260a599a720e4d44cb8e0a46915511df3
 @
 .prettierrc.json,1/e/1ee5d199ddbeaaa1717e65b449ac7a6f03bed689
-?
-.prettierignore,b/6/b69d8408b6c89ae66e712f0e6af68848291cfdfb
 c
 3client/src/components/landing/ProductHeroLayout.tsx,4/5/45d9d7c4ea1eab7075efa955d2ddeb88964895a9
 N

@@ -5,8 +5,15 @@
 ## How to use
 
 ```sh
-npm install
-npm run dev
+cd server
+yarn install
+yarn start
+```
+### In New Terminal
+```
+cd client
+yarn install
+yarn dev
 ```
 
 ### This project is connected to Travis CI. Pushes to master will trigger a build and will deploy a new dockerfile to

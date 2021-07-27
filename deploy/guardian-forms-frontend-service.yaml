@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  guardian-forms
+  labels:
+    service:  guardian-forms
+spec:
+  ports:
+    - name: "80"
+      port: 8100
+      targetPort: 80
+      protocol: TCP
+  selector:
+    service: guardian-forms
+  type: LoadBalancer

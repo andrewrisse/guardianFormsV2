@@ -1,8 +1,13 @@
-FROM nginx:stable-alpine
+FROM node:12.22.1-alpine
+
 ARG NODE_ENV="production"
+
 ENV NODE_ENV=${NODE_ENV}
+
 WORKDIR /app
+
 COPY . .
-COPY --from=build /app/build /usr/share/nginx/html
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+CMD ["yarn", "start"]
