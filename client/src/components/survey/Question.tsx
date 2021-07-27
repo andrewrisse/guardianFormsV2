@@ -11,7 +11,7 @@ import {
   removeSurveyQuestion,
   setQuestionInEditMode,
 } from '../../redux/slices/survey';
-import { IQuestion } from '../../../../@types/question';
+import { IQuestion } from '../../../@types/question';
 
 type QuestionProps = {
   question?: IQuestion;

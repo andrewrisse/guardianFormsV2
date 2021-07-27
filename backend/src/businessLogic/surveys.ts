@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { createLogger } from '../utils/logger'
 import Survey from '../models/survey';
 import Question from '../models/question';
-import { ISurvey } from '../../../@types/survey';
+import { ISurvey } from '../../../client/@types/survey';
 import { ALLOWED_SURVEY_PATCH_FIELDS } from "../../@types/survey";
 
 

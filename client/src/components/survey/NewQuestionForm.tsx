@@ -20,7 +20,7 @@ import {
   setQuestionInViewMode,
   updateSurveyQuestion
 } from '../../redux/slices/survey';
-import { IQuestion } from '../../../../@types/question';
+import { IQuestion } from '../../../@types/question';
 
 interface InitialState extends Omit<IQuestion, '_id'> {
   afterSubmit?: string;

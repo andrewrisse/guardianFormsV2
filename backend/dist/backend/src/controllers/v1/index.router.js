@@ -35,7 +35,7 @@ router.post("/surveys", (req, res) => __awaiter(void 0, void 0, void 0, function
         questions
     };
     const newSurvey = yield surveys_1.createSurvey(surveyData);
-    res.status(200).send(newSurvey);
+    res.status(201).send(newSurvey);
 }));
 router.get("/surveys/:sid", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.user;
@@ -80,8 +80,8 @@ router.delete("/surveys/:sid", (req, res) => __awaiter(void 0, void 0, void 0, f
     if (!email || !sid)
         res.status(400).send();
     try {
-        const survey = yield surveys_1.deleteSurvey(sid, email);
-        res.status(200).send(JSON.stringify(survey));
+        yield surveys_1.deleteSurvey(sid, email);
+        res.status(200).send();
     }
     catch (err) {
         if (err.message === 'Forbidden') {

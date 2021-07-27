@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IQuestion } from '../../../@types/question';
+import { IQuestion } from '../../../client/@types/question';
 
 export const questionSchema = new mongoose.Schema<IQuestion>({
   _id: {type: String, required: true},

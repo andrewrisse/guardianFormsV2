@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { green, orange } from '@material-ui/core/colors';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { ISurvey } from '../../../../@types/survey';
+import { ISurvey } from '../../../@types/survey';
 
 type ISurveyCardProps = {
   survey: ISurvey;

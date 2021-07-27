@@ -19,8 +19,8 @@ import NewQuestionForm from './NewQuestionForm';
 // redux
 import { RootState, useSelector } from '../../redux/store';
 import { createSurvey } from '../../redux/slices/survey';
-import { ISurvey } from '../../../../@types/survey';
-import { IQuestion } from '../../../../@types/question';
+import { ISurvey } from '../../../@types/survey';
+import { IQuestion } from '../../../@types/question';
 
 interface InitialState extends Omit<ISurvey, 'questions'> {
   afterSubmit?: string;

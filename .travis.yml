@@ -10,10 +10,18 @@ stages:
 
 script:
   - cd client
-  - yarn install
+  - yarn install --frozen-lockfile
   - yarn build
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t guardianforms -f Dockerfile .
   - docker tag guardianforms andrewrisse/guardian-forms:latest
   - docker push andrewrisse/guardian-forms
+  - cd ..
+  - cd server
+  - yarn install --frozen-lockfile
+  - yarn build
+  - docker build -t guardianformsapi -f Dockerfile .
+  - docker tag guardianformsapi andrewrisse/guardian-forms-api:latest
+  - docker push andrewrisse/guardian-forms-api
+
 

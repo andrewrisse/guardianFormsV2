@@ -5,7 +5,7 @@ import {
 
 import Page from '../../../components/Page';
 import SurveyCard from '../../../components/survey/SurveyCard';
-import { ISurvey } from '../../../../../@types/survey';
+import { ISurvey } from '../../../../@types/survey';
 import { makeBackendRequest } from '../../../utils/backendRequestHelpers';
 import { useAuth0 } from '@auth0/auth0-react';
 

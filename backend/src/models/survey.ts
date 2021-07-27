@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { questionSchema} from './question';
-import {ISurvey} from "../../../@types/survey";
+import {ISurvey} from "../../../client/@types/survey";
 
 const surveySchema = new mongoose.Schema<ISurvey>({
   public: { type: Boolean, required: true },

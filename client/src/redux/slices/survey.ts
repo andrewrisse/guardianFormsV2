@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { dispatch } from '../store';
 import axios from 'axios';
-import { ISurvey } from '../../../../@types/survey';
-import { IQuestion } from '../../../../@types/question';
+import { ISurvey } from '../../../@types/survey';
+import { IQuestion } from '../../../@types/question';
 import { makeBackendRequest } from '../../utils/backendRequestHelpers';
 
 type SurveyState = {

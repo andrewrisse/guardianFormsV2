@@ -13,6 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from "./Logo";
+import { useAuth0 } from '@auth0/auth0-react';
 
 type DashboardNavbarProps = {
   onMobileNavOpen: () => void;
@@ -21,6 +22,7 @@ type DashboardNavbarProps = {
 const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                                                            onMobileNavOpen
                                                          }) => {
+  const {logout} = useAuth0();
   const [notifications] = useState([]);
   const hidden = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -44,7 +46,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
             </Badge>
           </IconButton>
         )}
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={() => logout({returnTo: process.env.REACT_APP_HOME_URL})}>
           <InputIcon />
         </IconButton>
 
